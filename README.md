@@ -46,12 +46,20 @@ it opens as soon as you leave combat.
 
 ## Installation
 
-Copy the entire `WhitePlayerHealth` folder into
-`World of Warcraft/_retail_/Interface/AddOns`, then restart the game or run
-`/reload`. All files in the folder are required.
+Install through the CurseForge app, or download the zip and copy the
+`WhitePlayerHealth` folder into `World of Warcraft/_retail_/Interface/AddOns`,
+then restart the game. All files in the folder are required.
+
+A newly added addon folder is only picked up at launch, so the first install
+needs a full restart rather than `/reload`.
 
 ## Compatibility
 
-Built for World of Warcraft: Midnight (interface `120100`). It relies on the
-current Settings API and on color and resize functions added in recent
-versions, so it will not run on older clients.
+Built for World of Warcraft: Midnight, targeting interface versions `120100`
+and `120105` (patches 12.1.0 and 12.1.5). It relies on the current Settings
+API and on color and resize functions added in recent versions, so it will not
+run on older clients.
+
+## License
+
+Released under the MIT License - see [LICENSE](LICENSE).
