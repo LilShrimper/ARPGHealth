@@ -1,11 +1,11 @@
 ## Interface: 120100, 120105
-## Title: White Player Health
-## Version: 1.8
-## SavedVariables: WhitePlayerHealthDB
+## Title: ARPG Health
+## Version: 1.9
+## SavedVariables: ARPGHealthDB
 
 # Uncomment and fill in once the CurseForge project exists - the packager
 # reads this to know which project to upload to.
 # ## X-Curse-Project-ID: 000000
 
-WhitePlayerHealth.lua
+ARPGHealth.lua
 SettingsWidgets.xml

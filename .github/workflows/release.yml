@@ -4,7 +4,7 @@
 # The CurseForge upload only happens once both of these are in place:
 #   - the CF_API_KEY repository secret, from
 #     https://wow.curseforge.com/account/api-tokens
-#   - X-Curse-Project-ID in WhitePlayerHealth.toc, which only exists after the
+#   - X-Curse-Project-ID in ARPGHealth.toc, which only exists after the
 #     project has been created on CurseForge
 # Until then the packager skips CurseForge and still cuts the GitHub release,
 # so this is safe to merge before the project exists.

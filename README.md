@@ -1,4 +1,4 @@
-# WhitePlayerHealth
+# ARPGHealth
 
 A minimal, flat player health bar for World of Warcraft — white by default,
 with no portrait, no frame art and no gradients. Just a clean bar you can
@@ -19,23 +19,26 @@ drop above your character and forget about.
   confirmation prompt
 - Gets out of the way in combat: both panels close when a fight starts,
   and neither will open mid-fight
-- Settings panel at `Esc > Options > AddOns > WhitePlayerHealth`, covering
+- Settings panel at `Esc > Options > AddOns > ARPGHealth`, covering
   size, the edit-mode center guide, shield fill direction and colors
-  (moving and resizing is done with `/wph`, not from the panel)
+  (moving and resizing is done with `/arpg`, not from the panel)
 - Settings are saved account-wide and shared by all characters
 
 ## Usage
 
 | Command | Effect |
 | --- | --- |
-| `/wph` | Toggle edit mode (movable, resizable, opens the quick-edit panel) |
-| `/wph lock` | Lock the bar and close edit mode |
-| `/wph reset` | Restore the default position and size |
-| `/wph width #` | Set bar width in pixels |
-| `/wph height #` | Set bar height in pixels |
-| `/wph config` | Open the settings panel |
+| `/hp` | Toggle edit mode (movable, resizable, opens the quick-edit panel) |
+| `/hp lock` | Lock the bar and close edit mode |
+| `/hp reset` | Restore the default position and size |
+| `/hp width #` | Set bar width in pixels |
+| `/hp height #` | Set bar height in pixels |
+| `/hp config` | Open the settings panel |
 
-`/wph lock` always locks regardless of the current state, so it works as an
+`/arpg` and `/arpghealth` are aliases for the same command, in case another
+addon on your setup already claims `/hp`.
+
+`/hp lock` always locks regardless of the current state, so it works as an
 escape hatch if the bar ends up somewhere awkward to click.
 
 ### In combat
@@ -47,7 +50,7 @@ it opens as soon as you leave combat.
 ## Installation
 
 Install through the CurseForge app, or download the zip and copy the
-`WhitePlayerHealth` folder into `World of Warcraft/_retail_/Interface/AddOns`,
+`ARPGHealth` folder into `World of Warcraft/_retail_/Interface/AddOns`,
 then restart the game. All files in the folder are required.
 
 A newly added addon folder is only picked up at launch, so the first install
