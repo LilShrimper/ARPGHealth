@@ -1,9 +1,9 @@
-# The repository root IS the addon folder - WhitePlayerHealth.toc sits beside
-# this file rather than inside a WhitePlayerHealth/ subfolder. package-as tells
+# The repository root IS the addon folder - ARPGHealth.toc sits beside
+# this file rather than inside a ARPGHealth/ subfolder. package-as tells
 # the packager to wrap everything in that folder name inside the zip. Without
 # it the archive would unpack loose files straight into AddOns/ and WoW would
 # not see an addon at all.
-package-as: WhitePlayerHealth
+package-as: ARPGHealth
 
 # No embedded libraries, so there is no meaningful "no libraries" variant to
 # build alongside the normal package.

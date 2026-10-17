@@ -8,7 +8,7 @@
         this addon (which is otherwise entirely Lua, no XML) rather than split
         across both languages.
     -->
-    <Frame name="WhitePlayerHealthColorPreviewTemplate" mixin="WhitePlayerHealthColorPreviewMixin" virtual="true">
+    <Frame name="ARPGHealthColorPreviewTemplate" mixin="ARPGHealthColorPreviewMixin" virtual="true">
         <Size y="40"/>
         <Scripts>
             <OnLoad method="OnLoad"/>
@@ -23,12 +23,12 @@
         section title - wrong weight for a hint sitting under one. The text is
         fixed, so this needs no mixin.
     -->
-    <Frame name="WhitePlayerHealthSettingsNoteTemplate" virtual="true">
+    <Frame name="ARPGHealthSettingsNoteTemplate" virtual="true">
         <Size y="24"/>
         <Layers>
             <Layer level="OVERLAY">
                 <FontString parentKey="Note" inherits="GameFontHighlightSmall" justifyH="LEFT"
-                            text="Use /wph to move or resize the bar.">
+                            text="Use /arpg to move or resize the bar.">
                     <Anchors>
                         <Anchor point="LEFT" x="37" y="0"/>
                     </Anchors>

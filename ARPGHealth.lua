@@ -12,7 +12,7 @@ local DEFAULT_SHIELD_COLOR = "FF0099FF"
 -- Position is relative to the screen's center, so y = 250 puts the bar
 -- roughly above a standing character's head at default UI scale.
 -- Kept as constants because several separate paths reset back to them -
--- the settings panel, the quick-edit panel, and /wph reset.
+-- the settings panel, the quick-edit panel, and /arpg reset.
 local DEFAULT_X = 0
 local DEFAULT_Y = 250
 local DEFAULT_WIDTH = 240
@@ -23,54 +23,54 @@ local DEFAULT_HEIGHT = 5
 local DEFAULT_FILL_DIRECTION = "RTL"
 local DEFAULT_SHOW_GUIDE = true
 
-WhitePlayerHealthDB = WhitePlayerHealthDB or {}
+ARPGHealthDB = ARPGHealthDB or {}
 
-if WhitePlayerHealthDB.width == nil then
-    WhitePlayerHealthDB.width = DEFAULT_WIDTH
+if ARPGHealthDB.width == nil then
+    ARPGHealthDB.width = DEFAULT_WIDTH
 end
 
-if WhitePlayerHealthDB.height == nil then
-    WhitePlayerHealthDB.height = DEFAULT_HEIGHT
+if ARPGHealthDB.height == nil then
+    ARPGHealthDB.height = DEFAULT_HEIGHT
 end
 
-if WhitePlayerHealthDB.x == nil then
-    WhitePlayerHealthDB.x = DEFAULT_X
+if ARPGHealthDB.x == nil then
+    ARPGHealthDB.x = DEFAULT_X
 end
 
-if WhitePlayerHealthDB.y == nil then
-    WhitePlayerHealthDB.y = DEFAULT_Y
+if ARPGHealthDB.y == nil then
+    ARPGHealthDB.y = DEFAULT_Y
 end
 
-if WhitePlayerHealthDB.showCenterGuide == nil then
-    WhitePlayerHealthDB.showCenterGuide = DEFAULT_SHOW_GUIDE
+if ARPGHealthDB.showCenterGuide == nil then
+    ARPGHealthDB.showCenterGuide = DEFAULT_SHOW_GUIDE
 end
 
-if WhitePlayerHealthDB.editPanelX == nil then
-    WhitePlayerHealthDB.editPanelX = 0
+if ARPGHealthDB.editPanelX == nil then
+    ARPGHealthDB.editPanelX = 0
 end
 
-if WhitePlayerHealthDB.editPanelY == nil then
-    WhitePlayerHealthDB.editPanelY = -120
+if ARPGHealthDB.editPanelY == nil then
+    ARPGHealthDB.editPanelY = -120
 end
 
-if WhitePlayerHealthDB.absorbFillDirection == nil then
-    WhitePlayerHealthDB.absorbFillDirection = DEFAULT_FILL_DIRECTION
+if ARPGHealthDB.absorbFillDirection == nil then
+    ARPGHealthDB.absorbFillDirection = DEFAULT_FILL_DIRECTION
 end
 
-if WhitePlayerHealthDB.snapToCenter == nil then
-    WhitePlayerHealthDB.snapToCenter = true
+if ARPGHealthDB.snapToCenter == nil then
+    ARPGHealthDB.snapToCenter = true
 end
 
 -- The length check (rather than a plain == nil check) also repairs
 -- saved colors written by an earlier, broken build of this addon that
 -- stored 6-digit RGB strings instead of the 8-digit ARGB format
 -- CreateColorFromHexString actually requires.
-if WhitePlayerHealthDB.healthColor == nil or #WhitePlayerHealthDB.healthColor ~= 8 then
-    WhitePlayerHealthDB.healthColor = DEFAULT_HEALTH_COLOR
+if ARPGHealthDB.healthColor == nil or #ARPGHealthDB.healthColor ~= 8 then
+    ARPGHealthDB.healthColor = DEFAULT_HEALTH_COLOR
 end
 
-if WhitePlayerHealthDB.shieldColor == nil or #WhitePlayerHealthDB.shieldColor ~= 8 then
-    WhitePlayerHealthDB.shieldColor = DEFAULT_SHIELD_COLOR
+if ARPGHealthDB.shieldColor == nil or #ARPGHealthDB.shieldColor ~= 8 then
+    ARPGHealthDB.shieldColor = DEFAULT_SHIELD_COLOR
 end
 
 --------------------------------------------------
@@ -122,7 +122,7 @@ end
 -- BAR
 --------------------------------------------------
 
-local bar = CreateFrame("StatusBar", "WhitePlayerHealthBar", UIParent)
+local bar = CreateFrame("StatusBar", "ARPGHealthBar", UIParent)
 
 bar:SetMovable(true)
 bar:SetClampedToScreen(true)
@@ -131,7 +131,7 @@ bar:SetClampedToScreen(true)
 bar:SetStatusBarTexture("Interface\\Buttons\\WHITE8x8")
 
 local function ApplyHealthColor()
-    local hexColor = GetValidHexColor(WhitePlayerHealthDB.healthColor, DEFAULT_HEALTH_COLOR)
+    local hexColor = GetValidHexColor(ARPGHealthDB.healthColor, DEFAULT_HEALTH_COLOR)
     bar:SetStatusBarColor(CreateColorFromHexString(hexColor):GetRGB())
 
     RefreshColorPreviews()
@@ -188,10 +188,10 @@ barBorderRight:SetWidth(1)
 --------------------------------------------------
 
 local function ApplySettings()
-    bar:SetSize(WhitePlayerHealthDB.width, WhitePlayerHealthDB.height)
+    bar:SetSize(ARPGHealthDB.width, ARPGHealthDB.height)
 
     bar:ClearAllPoints()
-    bar:SetPoint("CENTER", UIParent, "CENTER", WhitePlayerHealthDB.x, WhitePlayerHealthDB.y)
+    bar:SetPoint("CENTER", UIParent, "CENTER", ARPGHealthDB.x, ARPGHealthDB.y)
 end
 
 --------------------------------------------------
@@ -200,8 +200,8 @@ end
 
 local function SavePosition()
     local _, _, _, x, y = bar:GetPoint()
-    WhitePlayerHealthDB.x = RoundToInt(x)
-    WhitePlayerHealthDB.y = RoundToInt(y)
+    ARPGHealthDB.x = RoundToInt(x)
+    ARPGHealthDB.y = RoundToInt(y)
 end
 
 --------------------------------------------------
@@ -209,8 +209,8 @@ end
 --------------------------------------------------
 
 local function SaveSize()
-    WhitePlayerHealthDB.width = RoundToInt(bar:GetWidth())
-    WhitePlayerHealthDB.height = RoundToInt(bar:GetHeight())
+    ARPGHealthDB.width = RoundToInt(bar:GetWidth())
+    ARPGHealthDB.height = RoundToInt(bar:GetHeight())
 
     -- Resizing from a corner shifts the frame's effective center point,
     -- so recompute the CENTER-relative offset before saving it. This
@@ -221,8 +221,8 @@ local function SaveSize()
     local parentCenterX, parentCenterY = UIParent:GetCenter()
 
     if centerX and centerY and parentCenterX and parentCenterY then
-        WhitePlayerHealthDB.x = RoundToInt(centerX - parentCenterX)
-        WhitePlayerHealthDB.y = RoundToInt(centerY - parentCenterY)
+        ARPGHealthDB.x = RoundToInt(centerX - parentCenterX)
+        ARPGHealthDB.y = RoundToInt(centerY - parentCenterY)
     end
 
     ApplySettings()
@@ -235,7 +235,7 @@ end
 local isEditMode = false
 
 -- Set when edit mode is asked for during combat, and honored once
--- combat ends. Mirrors pendingConfigOpen, so /wph and /wph config
+-- combat ends. Mirrors pendingConfigOpen, so /arpg and /arpg config
 -- behave the same way when used mid-fight.
 local pendingEditModeOpen = false
 
@@ -246,7 +246,7 @@ local pendingEditModeOpen = false
 -- A thin vertical line down screen x = 0 (UIParent's horizontal
 -- center), so the bar can be lined up above the character, who is
 -- normally centered on screen. Toggleable from the settings menu.
-local guideLine = CreateFrame("Frame", "WhitePlayerHealthGuideLine", UIParent)
+local guideLine = CreateFrame("Frame", "ARPGHealthGuideLine", UIParent)
 
 guideLine:SetPoint("TOP", UIParent, "TOP", 0, 0)
 guideLine:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 0)
@@ -261,17 +261,17 @@ guideLineTexture:SetAllPoints()
 guideLineTexture:SetColorTexture(1, 0.2, 0.2, 0.9)
 
 local function UpdateGuideLineVisibility()
-    guideLine:SetShown(bar:IsMouseEnabled() and WhitePlayerHealthDB.showCenterGuide)
+    guideLine:SetShown(bar:IsMouseEnabled() and ARPGHealthDB.showCenterGuide)
 end
 
 --------------------------------------------------
 -- QUICK EDIT PANEL (edit mode only)
 --------------------------------------------------
 
-local editPanel = CreateFrame("Frame", "WhitePlayerHealthEditPanel", UIParent)
+local editPanel = CreateFrame("Frame", "ARPGHealthEditPanel", UIParent)
 
 editPanel:SetSize(190, 208)
-editPanel:SetPoint("TOP", UIParent, "TOP", WhitePlayerHealthDB.editPanelX, WhitePlayerHealthDB.editPanelY)
+editPanel:SetPoint("TOP", UIParent, "TOP", ARPGHealthDB.editPanelX, ARPGHealthDB.editPanelY)
 editPanel:SetFrameStrata("HIGH")
 editPanel:SetMovable(true)
 editPanel:SetClampedToScreen(true)
@@ -310,7 +310,7 @@ epRight:SetWidth(1)
 
 local editPanelTitle = editPanel:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 editPanelTitle:SetPoint("TOP", editPanel, "TOP", 0, -8)
-editPanelTitle:SetText("WhitePlayerHealth")
+editPanelTitle:SetText("ARPGHealth")
 
 local function CreateEditPanelRow(labelText, yOffset)
     local label = editPanel:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
@@ -355,7 +355,7 @@ local function SnapBarToCenter()
     end
 end
 
--- Toggles WhitePlayerHealthDB.snapToCenter - whether releasing a drag
+-- Toggles ARPGHealthDB.snapToCenter - whether releasing a drag
 -- always snaps the bar to exactly centered (x = 0), or leaves it
 -- free-floating wherever it was dropped. Checking the box also snaps
 -- immediately, rather than waiting for the next drag. OnClick is wired
@@ -401,8 +401,8 @@ editPanelHint:SetText("Enter to apply - drag to move")
 
 local function SaveEditPanelPosition()
     local _, _, _, x, y = editPanel:GetPoint()
-    WhitePlayerHealthDB.editPanelX = RoundToInt(x)
-    WhitePlayerHealthDB.editPanelY = RoundToInt(y)
+    ARPGHealthDB.editPanelX = RoundToInt(x)
+    ARPGHealthDB.editPanelY = RoundToInt(y)
 end
 
 editPanel:SetScript("OnMouseDown", function(self)
@@ -415,7 +415,7 @@ editPanel:SetScript("OnMouseUp", function(self)
 end)
 
 local function FillDirectionLabel()
-    if WhitePlayerHealthDB.absorbFillDirection == "LTR" then
+    if ARPGHealthDB.absorbFillDirection == "LTR" then
         return "Shield Fill: Left to Right"
     else
         return "Shield Fill: Right to Left"
@@ -423,16 +423,16 @@ local function FillDirectionLabel()
 end
 
 local function RefreshEditPanelValues()
-    widthBox:SetText(tostring(WhitePlayerHealthDB.width))
-    heightBox:SetText(tostring(WhitePlayerHealthDB.height))
+    widthBox:SetText(tostring(ARPGHealthDB.width))
+    heightBox:SetText(tostring(ARPGHealthDB.height))
     fillDirectionButton:SetText(FillDirectionLabel())
-    snapToCenterCheckbox:SetChecked(WhitePlayerHealthDB.snapToCenter)
+    snapToCenterCheckbox:SetChecked(ARPGHealthDB.snapToCenter)
 end
 
 snapToCenterCheckbox:SetScript("OnClick", function(self)
-    WhitePlayerHealthDB.snapToCenter = self:GetChecked() and true or false
+    ARPGHealthDB.snapToCenter = self:GetChecked() and true or false
 
-    if WhitePlayerHealthDB.snapToCenter then
+    if ARPGHealthDB.snapToCenter then
         SnapBarToCenter()
         SavePosition()
     end
@@ -442,22 +442,22 @@ end)
 -- settings panel's Reset Position & Size button, so the two can't
 -- drift apart.
 local function ResetPositionAndSize()
-    WhitePlayerHealthDB.x = DEFAULT_X
-    WhitePlayerHealthDB.y = DEFAULT_Y
-    WhitePlayerHealthDB.width = DEFAULT_WIDTH
-    WhitePlayerHealthDB.height = DEFAULT_HEIGHT
+    ARPGHealthDB.x = DEFAULT_X
+    ARPGHealthDB.y = DEFAULT_Y
+    ARPGHealthDB.width = DEFAULT_WIDTH
+    ARPGHealthDB.height = DEFAULT_HEIGHT
 
     ApplySettings()
     RefreshEditPanelValues()
 end
 
-StaticPopupDialogs["WHITEPLAYERHEALTH_RESET_CONFIRM"] = {
+StaticPopupDialogs["ARPGHEALTH_RESET_CONFIRM"] = {
     text = "This will reset the bar's position and size to default settings.",
     button1 = "Confirm",
     button2 = "Exit",
     OnAccept = function()
         ResetPositionAndSize()
-        print("WhitePlayerHealth: position and size reset to defaults.")
+        print("ARPGHealth: position and size reset to defaults.")
     end,
     timeout = 0,
     whileDead = true,
@@ -467,7 +467,7 @@ StaticPopupDialogs["WHITEPLAYERHEALTH_RESET_CONFIRM"] = {
 -- Shared by both reset buttons - the quick-edit panel's and the
 -- settings panel's - so neither can reset without confirming first.
 local function ConfirmResetPositionAndSize()
-    StaticPopup_Show("WHITEPLAYERHEALTH_RESET_CONFIRM")
+    StaticPopup_Show("ARPGHEALTH_RESET_CONFIRM")
 end
 
 resetButton:SetScript("OnClick", ConfirmResetPositionAndSize)
@@ -480,11 +480,11 @@ local function ApplyPanelValues()
     local heightValue = tonumber(heightBox:GetText())
 
     if widthValue and widthValue > 0 then
-        WhitePlayerHealthDB.width = RoundToInt(widthValue)
+        ARPGHealthDB.width = RoundToInt(widthValue)
     end
 
     if heightValue and heightValue > 0 then
-        WhitePlayerHealthDB.height = RoundToInt(heightValue)
+        ARPGHealthDB.height = RoundToInt(heightValue)
     end
 
     ApplySettings()
@@ -667,7 +667,7 @@ absorbBar:SetFrameLevel(bar:GetFrameLevel() + 1)
 absorbBar:SetStatusBarTexture("Interface\\Buttons\\WHITE8x8")
 
 local function ApplyShieldColor()
-    local hexColor = GetValidHexColor(WhitePlayerHealthDB.shieldColor, DEFAULT_SHIELD_COLOR)
+    local hexColor = GetValidHexColor(ARPGHealthDB.shieldColor, DEFAULT_SHIELD_COLOR)
     local r, g, b = CreateColorFromHexString(hexColor):GetRGB()
     absorbBar:SetStatusBarColor(r, g, b, 0.75)
 
@@ -676,7 +676,7 @@ end
 
 ApplyShieldColor()
 
--- WhitePlayerHealthDB.absorbFillDirection is "RTL" (default, fills
+-- ARPGHealthDB.absorbFillDirection is "RTL" (default, fills
 -- from the right edge toward the left) or "LTR" (fills from the left
 -- edge toward the right).
 --
@@ -685,7 +685,7 @@ ApplyShieldColor()
 -- direction, so re-asserting it continuously was work that could never
 -- change the outcome.
 local function ApplyAbsorbFillDirection()
-    absorbBar:SetReverseFill(WhitePlayerHealthDB.absorbFillDirection ~= "LTR")
+    absorbBar:SetReverseFill(ARPGHealthDB.absorbFillDirection ~= "LTR")
 end
 
 ApplyAbsorbFillDirection()
@@ -764,14 +764,14 @@ end
 -- to show it and looking like the bar had unlocked itself.
 --
 -- The combat guard lives here rather than in the slash handler so it
--- covers the deferred combat-end open as well as /wph itself. Callers
+-- covers the deferred combat-end open as well as /arpg itself. Callers
 -- check isEditMode afterwards to tell whether it actually opened, since
 -- a deferred request looks the same to them otherwise.
 local function UnlockBar()
     if InCombatLockdown() then
         if not pendingEditModeOpen then
             pendingEditModeOpen = true
-            print("WhitePlayerHealth: edit mode can't be opened during combat. Opening once you leave combat.")
+            print("ARPGHealth: edit mode can't be opened during combat. Opening once you leave combat.")
         end
 
         return
@@ -801,14 +801,14 @@ end
 saveCloseButton:SetScript("OnClick", function()
     ApplyPanelValues()
     LockBar()
-    print("WhitePlayerHealth: edit mode off. Position and size saved.")
+    print("ARPGHealth: edit mode off. Position and size saved.")
 end)
 
 fillDirectionButton:SetScript("OnClick", function()
-    if WhitePlayerHealthDB.absorbFillDirection == "LTR" then
-        WhitePlayerHealthDB.absorbFillDirection = "RTL"
+    if ARPGHealthDB.absorbFillDirection == "LTR" then
+        ARPGHealthDB.absorbFillDirection = "RTL"
     else
-        WhitePlayerHealthDB.absorbFillDirection = "LTR"
+        ARPGHealthDB.absorbFillDirection = "LTR"
     end
 
     ApplyAbsorbFillDirection()
@@ -822,7 +822,7 @@ end)
 
 bar:EnableMouse(false)
 
--- When WhitePlayerHealthDB.snapToCenter is enabled (see the Snap to
+-- When ARPGHealthDB.snapToCenter is enabled (see the Snap to
 -- Center checkbox on the quick-edit panel), every release forces x
 -- back to 0 (the guide line) regardless of how far off it was
 -- dropped - there's no proximity window. Applied once after
@@ -837,7 +837,7 @@ end)
 bar:SetScript("OnMouseUp", function(self)
     self:StopMovingOrSizing()
 
-    if WhitePlayerHealthDB.snapToCenter then
+    if ARPGHealthDB.snapToCenter then
         SnapBarToCenter()
     end
 
@@ -927,9 +927,9 @@ end)
 -- rather than the half-and-half split it started at.
 local PREVIEW_SHIELD_FRACTION = 0.256
 
-WhitePlayerHealthColorPreviewMixin = {}
+ARPGHealthColorPreviewMixin = {}
 
-function WhitePlayerHealthColorPreviewMixin:OnLoad()
+function ARPGHealthColorPreviewMixin:OnLoad()
     local width, height = 200, 14
 
     self.barWidth = width - 2
@@ -956,9 +956,9 @@ function WhitePlayerHealthColorPreviewMixin:OnLoad()
     self.Shield:SetWidth(self.barWidth * PREVIEW_SHIELD_FRACTION)
 end
 
-function WhitePlayerHealthColorPreviewMixin:RefreshColors()
-    local healthHex = GetValidHexColor(WhitePlayerHealthDB.healthColor, DEFAULT_HEALTH_COLOR)
-    local shieldHex = GetValidHexColor(WhitePlayerHealthDB.shieldColor, DEFAULT_SHIELD_COLOR)
+function ARPGHealthColorPreviewMixin:RefreshColors()
+    local healthHex = GetValidHexColor(ARPGHealthDB.healthColor, DEFAULT_HEALTH_COLOR)
+    local shieldHex = GetValidHexColor(ARPGHealthDB.shieldColor, DEFAULT_SHIELD_COLOR)
 
     self.Health:SetColorTexture(CreateColorFromHexString(healthHex):GetRGB())
 
@@ -967,7 +967,7 @@ function WhitePlayerHealthColorPreviewMixin:RefreshColors()
 
     self.Shield:ClearAllPoints()
 
-    if WhitePlayerHealthDB.absorbFillDirection == "LTR" then
+    if ARPGHealthDB.absorbFillDirection == "LTR" then
         self.Shield:SetPoint("TOPLEFT", self.Health, "TOPLEFT")
         self.Shield:SetPoint("BOTTOMLEFT", self.Health, "BOTTOMLEFT")
     else
@@ -976,12 +976,12 @@ function WhitePlayerHealthColorPreviewMixin:RefreshColors()
     end
 end
 
-function WhitePlayerHealthColorPreviewMixin:OnShow()
+function ARPGHealthColorPreviewMixin:OnShow()
     self:RefreshColors()
     activeColorPreviews[self] = true
 end
 
-function WhitePlayerHealthColorPreviewMixin:OnHide()
+function ARPGHealthColorPreviewMixin:OnHide()
     activeColorPreviews[self] = nil
 end
 
@@ -992,27 +992,27 @@ end
 -- Built with the current (post-10.0, post-11.0.2) Settings API. Legacy
 -- templates like InterfaceOptionsCheckButtonTemplate were removed in
 -- 10.0, so this uses Settings.RegisterVerticalLayoutCategory plus
--- proxy settings bound straight to WhitePlayerHealthDB.
-local WPHSettingsCategory, WPHSettingsLayout = Settings.RegisterVerticalLayoutCategory("WhitePlayerHealth")
+-- proxy settings bound straight to ARPGHealthDB.
+local ARPGSettingsCategory, ARPGSettingsLayout = Settings.RegisterVerticalLayoutCategory("ARPG Health")
 
-Settings.RegisterAddOnCategory(WPHSettingsCategory)
+Settings.RegisterAddOnCategory(ARPGSettingsCategory)
 
-WPHSettingsLayout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Size"))
+ARPGSettingsLayout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Size"))
 
 do
     local function GetWidthSetting()
-        return WhitePlayerHealthDB.width
+        return ARPGHealthDB.width
     end
 
     local function SetWidthSetting(value)
-        WhitePlayerHealthDB.width = RoundToInt(value)
+        ARPGHealthDB.width = RoundToInt(value)
         ApplySettings()
         RefreshEditPanelValues()
     end
 
     local widthSetting = Settings.RegisterProxySetting(
-        WPHSettingsCategory,
-        "WPH_Width",
+        ARPGSettingsCategory,
+        "ARPG_Width",
         "number",
         "Bar Width",
         DEFAULT_WIDTH,
@@ -1023,23 +1023,23 @@ do
     local widthOptions = Settings.CreateSliderOptions(20, 600, 1)
     widthOptions:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right)
 
-    Settings.CreateSlider(WPHSettingsCategory, widthSetting, widthOptions, "Width of the health bar, in pixels.")
+    Settings.CreateSlider(ARPGSettingsCategory, widthSetting, widthOptions, "Width of the health bar, in pixels.")
 end
 
 do
     local function GetHeightSetting()
-        return WhitePlayerHealthDB.height
+        return ARPGHealthDB.height
     end
 
     local function SetHeightSetting(value)
-        WhitePlayerHealthDB.height = RoundToInt(value)
+        ARPGHealthDB.height = RoundToInt(value)
         ApplySettings()
         RefreshEditPanelValues()
     end
 
     local heightSetting = Settings.RegisterProxySetting(
-        WPHSettingsCategory,
-        "WPH_Height",
+        ARPGSettingsCategory,
+        "ARPG_Height",
         "number",
         "Bar Height",
         DEFAULT_HEIGHT,
@@ -1050,19 +1050,19 @@ do
     local heightOptions = Settings.CreateSliderOptions(1, 60, 1)
     heightOptions:SetLabelFormatter(MinimalSliderWithSteppersMixin.Label.Right)
 
-    Settings.CreateSlider(WPHSettingsCategory, heightSetting, heightOptions, "Height of the health bar, in pixels.")
+    Settings.CreateSlider(ARPGSettingsCategory, heightSetting, heightOptions, "Height of the health bar, in pixels.")
 end
 
-WPHSettingsLayout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Position"))
+ARPGSettingsLayout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Position"))
 
--- Replaces an Unlock Bar checkbox that duplicated /wph while being the
+-- Replaces an Unlock Bar checkbox that duplicated /arpg while being the
 -- worse way in: it left the panel showing a stale checked state after
--- /wph or a combat auto-lock changed things behind it, and it was a
+-- /arpg or a combat auto-lock changed things behind it, and it was a
 -- second entry point into edit mode that had to be reasoned about
 -- separately every time the locking logic changed.
-WPHSettingsLayout:AddInitializer(Settings.CreatePanelInitializer("WhitePlayerHealthSettingsNoteTemplate", {}))
+ARPGSettingsLayout:AddInitializer(Settings.CreatePanelInitializer("ARPGHealthSettingsNoteTemplate", {}))
 
-WPHSettingsLayout:AddInitializer(
+ARPGSettingsLayout:AddInitializer(
     CreateSettingsButtonInitializer(
         "Reset Bar",
         "Reset Position & Size",
@@ -1074,21 +1074,21 @@ WPHSettingsLayout:AddInitializer(
     )
 )
 
-WPHSettingsLayout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Edit Mode Helpers"))
+ARPGSettingsLayout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Edit Mode Helpers"))
 
 do
     local function GetShowGuideSetting()
-        return WhitePlayerHealthDB.showCenterGuide
+        return ARPGHealthDB.showCenterGuide
     end
 
     local function SetShowGuideSetting(value)
-        WhitePlayerHealthDB.showCenterGuide = value
+        ARPGHealthDB.showCenterGuide = value
         UpdateGuideLineVisibility()
     end
 
     local showGuideSetting = Settings.RegisterProxySetting(
-        WPHSettingsCategory,
-        "WPH_ShowCenterGuide",
+        ARPGSettingsCategory,
+        "ARPG_ShowCenterGuide",
         "boolean",
         "Show Center Guide Line",
         DEFAULT_SHOW_GUIDE,
@@ -1097,29 +1097,29 @@ do
     )
 
     Settings.CreateCheckbox(
-        WPHSettingsCategory,
+        ARPGSettingsCategory,
         showGuideSetting,
         "While the bar is unlocked, draws a vertical line down the screen's horizontal center (x = 0) to help line the bar up above your character."
     )
 end
 
-WPHSettingsLayout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Shield"))
+ARPGSettingsLayout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Shield"))
 
 do
     local function GetFillDirectionSetting()
-        return WhitePlayerHealthDB.absorbFillDirection
+        return ARPGHealthDB.absorbFillDirection
     end
 
     local function SetFillDirectionSetting(value)
-        WhitePlayerHealthDB.absorbFillDirection = value
+        ARPGHealthDB.absorbFillDirection = value
         ApplyAbsorbFillDirection()
         RefreshEditPanelValues()
         RefreshColorPreviews()
     end
 
     local fillDirectionSetting = Settings.RegisterProxySetting(
-        WPHSettingsCategory,
-        "WPH_AbsorbFillDirection",
+        ARPGSettingsCategory,
+        "ARPG_AbsorbFillDirection",
         "string",
         "Shield Fill Direction",
         DEFAULT_FILL_DIRECTION,
@@ -1135,29 +1135,29 @@ do
     end
 
     Settings.CreateDropdown(
-        WPHSettingsCategory,
+        ARPGSettingsCategory,
         fillDirectionSetting,
         GetFillDirectionOptions,
         "Choose which direction the shield overlay fills."
     )
 end
 
-WPHSettingsLayout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Colors"))
-WPHSettingsLayout:AddInitializer(Settings.CreatePanelInitializer("WhitePlayerHealthColorPreviewTemplate", {}))
+ARPGSettingsLayout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Colors"))
+ARPGSettingsLayout:AddInitializer(Settings.CreatePanelInitializer("ARPGHealthColorPreviewTemplate", {}))
 
 do
     local function GetHealthColorSetting()
-        return GetValidHexColor(WhitePlayerHealthDB.healthColor, DEFAULT_HEALTH_COLOR)
+        return GetValidHexColor(ARPGHealthDB.healthColor, DEFAULT_HEALTH_COLOR)
     end
 
     local function SetHealthColorSetting(value)
-        WhitePlayerHealthDB.healthColor = value
+        ARPGHealthDB.healthColor = value
         ApplyHealthColor()
     end
 
     local healthColorSetting = Settings.RegisterProxySetting(
-        WPHSettingsCategory,
-        "WPH_HealthColor",
+        ARPGSettingsCategory,
+        "ARPG_HealthColor",
         "string",
         "Health Bar Color",
         DEFAULT_HEALTH_COLOR,
@@ -1165,22 +1165,22 @@ do
         SetHealthColorSetting
     )
 
-    Settings.CreateColorSwatch(WPHSettingsCategory, healthColorSetting, "Color of the health bar fill.")
+    Settings.CreateColorSwatch(ARPGSettingsCategory, healthColorSetting, "Color of the health bar fill.")
 end
 
 do
     local function GetShieldColorSetting()
-        return GetValidHexColor(WhitePlayerHealthDB.shieldColor, DEFAULT_SHIELD_COLOR)
+        return GetValidHexColor(ARPGHealthDB.shieldColor, DEFAULT_SHIELD_COLOR)
     end
 
     local function SetShieldColorSetting(value)
-        WhitePlayerHealthDB.shieldColor = value
+        ARPGHealthDB.shieldColor = value
         ApplyShieldColor()
     end
 
     local shieldColorSetting = Settings.RegisterProxySetting(
-        WPHSettingsCategory,
-        "WPH_ShieldColor",
+        ARPGSettingsCategory,
+        "ARPG_ShieldColor",
         "string",
         "Shield Bar Color",
         DEFAULT_SHIELD_COLOR,
@@ -1188,22 +1188,22 @@ do
         SetShieldColorSetting
     )
 
-    Settings.CreateColorSwatch(WPHSettingsCategory, shieldColorSetting, "Color of the shield/absorb overlay.")
+    Settings.CreateColorSwatch(ARPGSettingsCategory, shieldColorSetting, "Color of the shield/absorb overlay.")
 end
 
 do
     -- Going through Settings.SetValue() (rather than writing
-    -- WhitePlayerHealthDB directly) also runs the setting's normal
+    -- ARPGHealthDB directly) also runs the setting's normal
     -- change-notification path, so the swatches themselves visually
     -- update immediately - a direct write updates the bar but leaves
     -- the swatch widgets showing the old color until something else
     -- forces them to redraw.
     local function ResetColorsToDefault()
-        Settings.SetValue("WPH_HealthColor", DEFAULT_HEALTH_COLOR, true)
-        Settings.SetValue("WPH_ShieldColor", DEFAULT_SHIELD_COLOR, true)
+        Settings.SetValue("ARPG_HealthColor", DEFAULT_HEALTH_COLOR, true)
+        Settings.SetValue("ARPG_ShieldColor", DEFAULT_SHIELD_COLOR, true)
     end
 
-    WPHSettingsLayout:AddInitializer(
+    ARPGSettingsLayout:AddInitializer(
         CreateSettingsButtonInitializer(
             "Reset Colors",
             "Set to Default Color",
@@ -1227,17 +1227,18 @@ local pendingConfigOpen = false
 local function OpenConfig()
     if InCombatLockdown() then
         pendingConfigOpen = true
-        print("WhitePlayerHealth: settings can't be opened during combat. Opening once you leave combat.")
+        print("ARPGHealth: settings can't be opened during combat. Opening once you leave combat.")
         return
     end
 
     -- Midnight requires the numeric category ID here, not the name.
-    Settings.OpenToCategory(WPHSettingsCategory:GetID())
+    Settings.OpenToCategory(ARPGSettingsCategory:GetID())
 end
 
-SLASH_WHITEPLAYERHEALTH1 = "/wph"
+SLASH_ARPGHEALTH1 = "/arpg"
+SLASH_ARPGHEALTH2 = "/arpghealth"
 
-SlashCmdList["WHITEPLAYERHEALTH"] = function(msg)
+SlashCmdList["ARPGHEALTH"] = function(msg)
     local cmd, value = strsplit(" ", msg)
     cmd = (cmd or ""):lower()
     value = tonumber(value)
@@ -1245,51 +1246,51 @@ SlashCmdList["WHITEPLAYERHEALTH"] = function(msg)
     if cmd == "" then
         if isEditMode then
             LockBar()
-            print("WhitePlayerHealth: edit mode off. Position and size saved.")
+            print("ARPGHealth: edit mode off. Position and size saved.")
         elseif pendingEditModeOpen then
-            -- Keeps /wph a real toggle during combat: a second press
+            -- Keeps /arpg a real toggle during combat: a second press
             -- takes back the queued request instead of re-queueing it.
             pendingEditModeOpen = false
-            print("WhitePlayerHealth: edit mode request cancelled.")
+            print("ARPGHealth: edit mode request cancelled.")
         else
             UnlockBar()
 
             -- Only announce it if it actually opened - UnlockBar()
             -- refuses during combat and says so itself.
             if isEditMode then
-                print("WhitePlayerHealth: edit mode on. Drag to move, drag the corner handle to resize, or type exact values in the panel. Type /wph again to finish.")
+                print("ARPGHealth: edit mode on. Drag to move, drag the corner handle to resize, or type exact values in the panel. Type /arpg again to finish.")
             end
         end
     elseif cmd == "lock" then
         LockBar()
-        print("WhitePlayerHealth locked.")
+        print("ARPGHealth locked.")
     elseif cmd == "reset" then
         -- Same scope as the panel buttons, so "reset" means one thing
         -- everywhere - but with no confirmation dialog, since typing
         -- the command is already deliberate in a way that clicking a
         -- button next to Save & Close isn't.
         ResetPositionAndSize()
-        print("WhitePlayerHealth: position and size reset to defaults.")
+        print("ARPGHealth: position and size reset to defaults.")
     elseif cmd == "width" and value then
-        WhitePlayerHealthDB.width = value
+        ARPGHealthDB.width = value
         ApplySettings()
         RefreshEditPanelValues()
     elseif cmd == "height" and value then
-        WhitePlayerHealthDB.height = value
+        ARPGHealthDB.height = value
         ApplySettings()
         RefreshEditPanelValues()
     elseif cmd == "config" or cmd == "options" then
         OpenConfig()
     else
         -- "#" rather than "<n>" for the numeric placeholders: angle
-        -- brackets invite typing them literally, as /wph width <30>.
-        print("WhitePlayerHealth commands:")
-        print("/wph - toggle edit mode (move, resize, quick-edit panel)")
-        print("/wph lock - close edit mode and lock the bar")
-        print("/wph reset - restore default position and size")
-        print("/wph width # - set bar width in pixels")
-        print("/wph height # - set bar height in pixels")
-        print("/wph config - open the settings panel")
+        -- brackets invite typing them literally, as /arpg width <30>.
+        print("ARPGHealth commands:")
+        print("/arpg - toggle edit mode (move, resize, quick-edit panel)")
+        print("/arpg lock - close edit mode and lock the bar")
+        print("/arpg reset - restore default position and size")
+        print("/arpg width # - set bar width in pixels")
+        print("/arpg height # - set bar height in pixels")
+        print("/arpg config - open the settings panel")
     end
 end
 
@@ -1305,7 +1306,7 @@ local function IsOurSettingsCategoryShown()
         return false
     end
 
-    return SettingsPanel:GetCurrentCategory() == WPHSettingsCategory
+    return SettingsPanel:GetCurrentCategory() == ARPGSettingsCategory
 end
 
 -- Gets this addon's panels out of the way when a fight starts. Nothing
@@ -1334,7 +1335,7 @@ local function CloseOurPanelsForCombat()
     end
 
     if closedAnything then
-        print("WhitePlayerHealth: closed for combat - reopen with /wph or /wph config.")
+        print("ARPGHealth: closed for combat - reopen with /arpg or /arpg config.")
     end
 end
 
@@ -1363,7 +1364,7 @@ combatPanelFrame:SetScript("OnEvent", function(_, event)
         UnlockBar()
 
         if isEditMode then
-            print("WhitePlayerHealth: combat over - opening the edit mode you asked for during the fight.")
+            print("ARPGHealth: combat over - opening the edit mode you asked for during the fight.")
         end
     end
 
@@ -1410,7 +1411,7 @@ local function ApplyAbsorbSkin()
         return
     end
 
-    local hexColor = GetValidHexColor(WhitePlayerHealthDB.shieldColor, DEFAULT_SHIELD_COLOR)
+    local hexColor = GetValidHexColor(ARPGHealthDB.shieldColor, DEFAULT_SHIELD_COLOR)
     local r, g, b = CreateColorFromHexString(hexColor):GetRGB()
 
     if hb.totalAbsorb then
