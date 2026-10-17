@@ -28,7 +28,7 @@
         <Layers>
             <Layer level="OVERLAY">
                 <FontString parentKey="Note" inherits="GameFontHighlightSmall" justifyH="LEFT"
-                            text="Use /arpg to move or resize the bar.">
+                            text="Use /hp to move or resize the bar.">
                     <Anchors>
                         <Anchor point="LEFT" x="37" y="0"/>
                     </Anchors>

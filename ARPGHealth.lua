@@ -12,7 +12,7 @@ local DEFAULT_SHIELD_COLOR = "FF0099FF"
 -- Position is relative to the screen's center, so y = 250 puts the bar
 -- roughly above a standing character's head at default UI scale.
 -- Kept as constants because several separate paths reset back to them -
--- the settings panel, the quick-edit panel, and /arpg reset.
+-- the settings panel, the quick-edit panel, and /hp reset.
 local DEFAULT_X = 0
 local DEFAULT_Y = 250
 local DEFAULT_WIDTH = 240
@@ -235,7 +235,7 @@ end
 local isEditMode = false
 
 -- Set when edit mode is asked for during combat, and honored once
--- combat ends. Mirrors pendingConfigOpen, so /arpg and /arpg config
+-- combat ends. Mirrors pendingConfigOpen, so /hp and /hp config
 -- behave the same way when used mid-fight.
 local pendingEditModeOpen = false
 
@@ -764,7 +764,7 @@ end
 -- to show it and looking like the bar had unlocked itself.
 --
 -- The combat guard lives here rather than in the slash handler so it
--- covers the deferred combat-end open as well as /arpg itself. Callers
+-- covers the deferred combat-end open as well as /hp itself. Callers
 -- check isEditMode afterwards to tell whether it actually opened, since
 -- a deferred request looks the same to them otherwise.
 local function UnlockBar()
@@ -1055,9 +1055,9 @@ end
 
 ARPGSettingsLayout:AddInitializer(CreateSettingsListSectionHeaderInitializer("Position"))
 
--- Replaces an Unlock Bar checkbox that duplicated /arpg while being the
+-- Replaces an Unlock Bar checkbox that duplicated /hp while being the
 -- worse way in: it left the panel showing a stale checked state after
--- /arpg or a combat auto-lock changed things behind it, and it was a
+-- /hp or a combat auto-lock changed things behind it, and it was a
 -- second entry point into edit mode that had to be reasoned about
 -- separately every time the locking logic changed.
 ARPGSettingsLayout:AddInitializer(Settings.CreatePanelInitializer("ARPGHealthSettingsNoteTemplate", {}))
@@ -1235,8 +1235,13 @@ local function OpenConfig()
     Settings.OpenToCategory(ARPGSettingsCategory:GetID())
 end
 
-SLASH_ARPGHEALTH1 = "/arpg"
-SLASH_ARPGHEALTH2 = "/arpghealth"
+-- Three aliases for one handler. /hp is the one worth typing; /arpg and
+-- /arpghealth exist so the addon is still reachable if another addon
+-- claims /hp - whichever registers last wins, and short generic names
+-- are the ones most likely to be contested.
+SLASH_ARPGHEALTH1 = "/hp"
+SLASH_ARPGHEALTH2 = "/arpg"
+SLASH_ARPGHEALTH3 = "/arpghealth"
 
 SlashCmdList["ARPGHEALTH"] = function(msg)
     local cmd, value = strsplit(" ", msg)
@@ -1248,7 +1253,7 @@ SlashCmdList["ARPGHEALTH"] = function(msg)
             LockBar()
             print("ARPGHealth: edit mode off. Position and size saved.")
         elseif pendingEditModeOpen then
-            -- Keeps /arpg a real toggle during combat: a second press
+            -- Keeps /hp a real toggle during combat: a second press
             -- takes back the queued request instead of re-queueing it.
             pendingEditModeOpen = false
             print("ARPGHealth: edit mode request cancelled.")
@@ -1258,7 +1263,7 @@ SlashCmdList["ARPGHEALTH"] = function(msg)
             -- Only announce it if it actually opened - UnlockBar()
             -- refuses during combat and says so itself.
             if isEditMode then
-                print("ARPGHealth: edit mode on. Drag to move, drag the corner handle to resize, or type exact values in the panel. Type /arpg again to finish.")
+                print("ARPGHealth: edit mode on. Drag to move, drag the corner handle to resize, or type exact values in the panel. Type /hp again to finish.")
             end
         end
     elseif cmd == "lock" then
@@ -1283,14 +1288,15 @@ SlashCmdList["ARPGHEALTH"] = function(msg)
         OpenConfig()
     else
         -- "#" rather than "<n>" for the numeric placeholders: angle
-        -- brackets invite typing them literally, as /arpg width <30>.
+        -- brackets invite typing them literally, as /hp width <30>.
         print("ARPGHealth commands:")
-        print("/arpg - toggle edit mode (move, resize, quick-edit panel)")
-        print("/arpg lock - close edit mode and lock the bar")
-        print("/arpg reset - restore default position and size")
-        print("/arpg width # - set bar width in pixels")
-        print("/arpg height # - set bar height in pixels")
-        print("/arpg config - open the settings panel")
+        print("/hp - toggle edit mode (move, resize, quick-edit panel)")
+        print("/hp lock - close edit mode and lock the bar")
+        print("/hp reset - restore default position and size")
+        print("/hp width # - set bar width in pixels")
+        print("/hp height # - set bar height in pixels")
+        print("/hp config - open the settings panel")
+        print("/arpg and /arpghealth work the same way.")
     end
 end
 
@@ -1335,7 +1341,7 @@ local function CloseOurPanelsForCombat()
     end
 
     if closedAnything then
-        print("ARPGHealth: closed for combat - reopen with /arpg or /arpg config.")
+        print("ARPGHealth: closed for combat - reopen with /hp or /hp config.")
     end
 end
 

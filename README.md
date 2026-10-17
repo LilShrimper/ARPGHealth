@@ -28,14 +28,17 @@ drop above your character and forget about.
 
 | Command | Effect |
 | --- | --- |
-| `/arpg` | Toggle edit mode (movable, resizable, opens the quick-edit panel) |
-| `/arpg lock` | Lock the bar and close edit mode |
-| `/arpg reset` | Restore the default position and size |
-| `/arpg width #` | Set bar width in pixels |
-| `/arpg height #` | Set bar height in pixels |
-| `/arpg config` | Open the settings panel |
+| `/hp` | Toggle edit mode (movable, resizable, opens the quick-edit panel) |
+| `/hp lock` | Lock the bar and close edit mode |
+| `/hp reset` | Restore the default position and size |
+| `/hp width #` | Set bar width in pixels |
+| `/hp height #` | Set bar height in pixels |
+| `/hp config` | Open the settings panel |
 
-`/arpg lock` always locks regardless of the current state, so it works as an
+`/arpg` and `/arpghealth` are aliases for the same command, in case another
+addon on your setup already claims `/hp`.
+
+`/hp lock` always locks regardless of the current state, so it works as an
 escape hatch if the bar ends up somewhere awkward to click.
 
 ### In combat
