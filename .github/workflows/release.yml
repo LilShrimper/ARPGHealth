@@ -1,0 +1,36 @@
+# Publishes a release whenever a tag is pushed: builds the addon zip, attaches
+# it to a GitHub release, and uploads it to CurseForge.
+#
+# The CurseForge upload only happens once both of these are in place:
+#   - the CF_API_KEY repository secret, from
+#     https://wow.curseforge.com/account/api-tokens
+#   - X-Curse-Project-ID in WhitePlayerHealth.toc, which only exists after the
+#     project has been created on CurseForge
+# Until then the packager skips CurseForge and still cuts the GitHub release,
+# so this is safe to merge before the project exists.
+name: Release
+
+on:
+  push:
+    tags:
+      - '**'
+
+# The default token is read-only, which fails when the packager tries to create
+# the GitHub release.
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      # fetch-depth: 0 pulls full history, which the packager reads to build
+      # the changelog from commit messages since the previous tag.
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: BigWigsMods/packager@v2
+        env:
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
