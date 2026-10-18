@@ -3,9 +3,10 @@
 ## Version: 1.10
 ## SavedVariables: ARPGHealthDB
 
-# Uncomment and fill in once the CurseForge project exists - the packager
-# reads this to know which project to upload to.
-# ## X-Curse-Project-ID: 000000
+# Tells the packager which CurseForge project to upload a tagged release
+# to. Paired with the CF_API_KEY repository secret - without both, the
+# packager skips CurseForge and only cuts the GitHub release.
+## X-Curse-Project-ID: 1750502
 
 ARPGHealth.lua
 SettingsWidgets.xml
