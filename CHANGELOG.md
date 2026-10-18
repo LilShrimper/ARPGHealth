@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.11 - 2026-10-18
+
+Declares support for patch 12.1.7, currently on the PTR, so the addon is
+not flagged out of date there.
+
+Nothing in 12.1.7 affects this addon. Checked against Blizzard interface
+source rather than patch notes: the settings framework is unchanged, and
+the four unit functions it calls are byte-identical, secret-value flags
+included. The one nearby change, to how dialogs resolve hideOnEscape,
+falls back to the existing field when a dialog does not define the new
+callback, which is this addon's case.
+
 ## 1.10 - 2026-10-17
 
 Packaging only, no gameplay changes. Releases now ship this hand-written

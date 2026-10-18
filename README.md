@@ -58,10 +58,10 @@ needs a full restart rather than `/reload`.
 
 ## Compatibility
 
-Built for World of Warcraft: Midnight, targeting interface versions `120100`
-and `120105` (patches 12.1.0 and 12.1.5). It relies on the current Settings
-API and on color and resize functions added in recent versions, so it will not
-run on older clients.
+Built for World of Warcraft: Midnight, targeting interface versions `120100`,
+`120105` and `120107` (patches 12.1.0, 12.1.5 and 12.1.7). It relies on the
+current Settings API and on color and resize functions added in recent
+versions, so it will not run on older clients.
 
 ## License
 
