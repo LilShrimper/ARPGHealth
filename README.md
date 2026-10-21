@@ -59,9 +59,15 @@ needs a full restart rather than `/reload`.
 ## Compatibility
 
 Built for World of Warcraft: Midnight, targeting interface versions `120100`,
-`120105` and `120107` (patches 12.1.0, 12.1.5 and 12.1.7). It relies on the
-current Settings API and on color and resize functions added in recent
-versions, so it will not run on older clients.
+`120105` and `120107` (patches 12.1.0, 12.1.5 and 12.1.7), and for WoW:
+Forever (`16001`), which runs the same modern addon API.
+
+It relies on the current Settings API and on color and resize functions added
+in recent versions, so it will not run on older Classic clients.
+
+On Forever the shield overlay will rarely have anything to draw: absorb
+effects are scarce on a 1.60-era client, so `UnitGetTotalAbsorbs` is usually
+zero. The health bar itself behaves the same as on retail.
 
 ## License
 

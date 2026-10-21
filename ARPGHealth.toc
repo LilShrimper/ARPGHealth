@@ -1,6 +1,6 @@
-## Interface: 120100, 120105, 120107
+## Interface: 16001, 120100, 120105, 120107
 ## Title: ARPG Health
-## Version: 1.11
+## Version: 1.12
 ## SavedVariables: ARPGHealthDB
 
 # Tells the packager which CurseForge project to upload a tagged release

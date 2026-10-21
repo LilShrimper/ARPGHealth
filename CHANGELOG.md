@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.12 - 2026-10-18
+
+Declares support for WoW: Forever (interface `16001`).
+
+Forever runs the modern addon API rather than the Classic one, and every
+function this addon calls is present there: the settings framework, the four
+unit functions, and the status bar methods. The colour and status bar files
+are byte-identical to retail.
+
+One thing to expect: the shield overlay will rarely appear on Forever, since
+absorb effects are scarce on a 1.60-era client and there is usually nothing
+for it to draw. The health bar is unaffected.
+
 ## 1.11 - 2026-10-18
 
 Declares support for patch 12.1.7, currently on the PTR, so the addon is
